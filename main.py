@@ -4,6 +4,7 @@ from plyer import filechooser
 import numpy as np
 from tensorflow.keras.models import load_model  # из кераса подгружаем  метод загрузки предобученной модели
 import tensorflow as tf
+from PIL import Image
 
 KV = """
 ScreenManager:
@@ -45,23 +46,23 @@ ScreenManager:
 
 
 class ImageClassify(MDApp):
-
+    model = load_model('best_model+815.h5')
     def build(self):
         return Builder.load_string(KV)
 
     def file_chooser(self):
         filechooser.open_file(on_selection=self.selected)
 
-    def selected(self, selection):
+    def selected(self, selection, model):
         if selection:
             self.root.ids.img.source = selection[0]
             print(selection[0])
-            self.recognition(selection[0])
+            self.recognition(selection[0], model)
 
-    def recognition(self, image):
+    def recognition(self, pathImage, model):
         # Convert the model
-        model = tf.lite.TFLiteConverter.from_keras_model('best_model+815.h5')  # path to the SavedModel directory
-        #tflite_model = converter.convert()
+        #converter = tf.lite.TFLiteConverter.from_keras_model('best_model+815.h5')  # path to the SavedModel directory
+        #model = converter.convert()
         #model = load_model('best_model+815.h5')
         # наименование класса попорядку
         numClass = ['DJI_Inspire_2',
@@ -76,7 +77,7 @@ class ImageClassify(MDApp):
 
         img_width = 227  # Ширина изображения
         img_height = 227  # Высота изображения
-
+        image = Image.open(pathImage)
         img = np.array(image)  # переводим в массив
         img = img / 255.0  # нормализуем
         img = np.expand_dims(img, axis=0)  # добавляем дополнительную размерность, так как НС просит размер батч сайза
