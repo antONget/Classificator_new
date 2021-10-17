@@ -3,7 +3,6 @@ from kivy.lang import Builder
 from plyer import filechooser
 import numpy as np
 from tensorflow.keras.models import load_model  # из кераса подгружаем  метод загрузки предобученной модели
-import tensorflow as tf
 from PIL import Image
 
 KV = """
@@ -84,7 +83,7 @@ class ImageClassify(MDApp):
         percentClass = round(listProbablyImg[0, predClass] * 100, 2)
         nameClass = numClass[predClass]
         # выводим информацию по распознованию в лейбл
-        print("This image belongs to {} class with probability {} %".format(predClass, listProbablyImg))
+        print("This image belongs to {} class #{}# with probability {} %".format(predClass, numClass[predClass], listProbablyImg[predClass],))
 
 
 if __name__ == "__main__":
