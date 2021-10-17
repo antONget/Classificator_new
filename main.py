@@ -53,17 +53,14 @@ class ImageClassify(MDApp):
     def file_chooser(self):
         filechooser.open_file(on_selection=self.selected)
 
-    def selected(self, selection, model):
+    def selected(self, selection, model=model):
         if selection:
             self.root.ids.img.source = selection[0]
             print(selection[0])
             self.recognition(selection[0], model)
 
     def recognition(self, pathImage, model):
-        # Convert the model
-        #converter = tf.lite.TFLiteConverter.from_keras_model('best_model+815.h5')  # path to the SavedModel directory
-        #model = converter.convert()
-        #model = load_model('best_model+815.h5')
+
         # наименование класса попорядку
         numClass = ['DJI_Inspire_2',
                     'DJI_Matrice_210-RTK',
