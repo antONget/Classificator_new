@@ -3,6 +3,7 @@ from kivy.lang import Builder
 from plyer import filechooser
 import numpy as np
 from tensorflow.keras.models import load_model  # из кераса подгружаем  метод загрузки предобученной модели
+import tensorflow as tf
 
 KV = """
 ScreenManager:
@@ -58,7 +59,10 @@ class ImageClassify(MDApp):
             self.recognition(selection[0])
 
     def recognition(self, image):
-        model = load_model('C:\Users\PC\PycharmProjects\Classificator\best_model+815.h5')
+        # Convert the model
+        model = tf.lite.TFLiteConverter.from_keras_model('best_model+815.h5')  # path to the SavedModel directory
+        #tflite_model = converter.convert()
+        #model = load_model('best_model+815.h5')
         # наименование класса попорядку
         numClass = ['DJI_Inspire_2',
                     'DJI_Matrice_210-RTK',
