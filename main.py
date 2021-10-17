@@ -4,7 +4,7 @@ from plyer import filechooser
 import numpy as np
 from tensorflow.keras.models import load_model  # из кераса подгружаем  метод загрузки предобученной модели
 from PIL import Image
-
+from kivy.animation import Animation
 KV = """
 ScreenManager:
     MDScreen:
@@ -39,6 +39,14 @@ ScreenManager:
         MDRoundFlatButton:
             text: "Начать распознование"
             pos_hint: {"center_x": .5, "center_y": .1}
+            on_release:app.anime(label)
+            
+        MDLabel:
+            id: label
+            text: "PRIVET"
+            x_hint: 2.0
+            pos_hint:{"center_x": self.x_hint, "center_y": .5}
+            font_style: "H3
 
 
 """
@@ -57,6 +65,11 @@ class ImageClassify(MDApp):
             self.root.ids.img.source = selection[0]
             print(selection[0])
             self.recognition(selection[0], model)
+
+    def anime(self, label, pred):
+        anim = Animation(x_hint=.9)
+        anim.start(label)
+        self.root.ids.label.text = pred
 
     def recognition(self, pathImage, model):
 
@@ -83,8 +96,8 @@ class ImageClassify(MDApp):
         percentClass = round(listProbablyImg[0, predClass] * 100, 2)
         nameClass = numClass[predClass]
         # выводим информацию по распознованию в лейбл
-        print("This image belongs to {} class #{}# with probability {} %".format(predClass, numClass[predClass], listProbablyImg[predClass],))
-
+        pred = ("This image belongs to {} class #{}# with probability {} %".format(predClass, numClass[predClass], listProbablyImg[predClass],))
+        #self.root.ids.label.text = pred
 
 if __name__ == "__main__":
     ImageClassify().run()
