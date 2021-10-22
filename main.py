@@ -7,6 +7,9 @@ from tensorflow.keras.models import load_model  # из кераса подгру
 from PIL import Image
 from kivy.animation import Animation
 
+import os
+import sys
+
 KV = """
 ScreenManager:
     MDScreen:
@@ -61,8 +64,16 @@ ScreenManager:
 
 
 class ImageClassify(MDApp):
-    model = load_model('best_model+815.h5')
 
+    #def resource_path(relative):
+        #if hasattr(sys, "_MEIPASS"):
+            #return os.path.join(sys._MEIPASS, relative)
+        #return os.path.join(relative)
+
+    #modelName = 'best_model+815.h5'
+    #data_dir = 'C:\\Users\\PC\\PycharmProjects\\Classificator'
+    #model = resource_path(os.path.join(data_dir, modelName))
+    model = load_model('best_model+815.h5')
 
     def build(self):
         return Builder.load_string(KV)
