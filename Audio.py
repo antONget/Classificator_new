@@ -6,6 +6,52 @@ import json  # работа с json-файлами и json-строками
 import os  # работа с файловой системой
 import pyaudio
 import io, os, sys, setuptools, tokenize
+from PIL import Image
+from matplotlib import pyplot as plt
+import numpy as np
+
+# Создаем словарь частей железного человека с цветами пикселей
+slovar2 = {'лицо'      :253,
+           'голова'    :252,
+           'блики'     :251,
+           'грудь'     :250,
+           'плечи'     :249,
+           'руки'      :248,
+           'предплечье':247,
+           'предплечья':247,
+           'живот'     :246,
+           'шея'       :245,
+           'глаза'     :244,
+           'реактор'   :243,
+           'Reactor'   :243,
+           }
+
+# Создаем словарь цветов в формате png
+colors2 = {'жёлтый' :[255, 255, 0, 255],
+           'Жёлтый' :[255, 255, 0, 255],
+           'красный':[255, 0, 0, 255],
+           'синий'  :[0, 0, 255, 255],
+           'зелёный':[0, 255, 0, 255],
+           'голубой':[170, 170, 255, 255],
+           'черный' :[0, 0, 0, 255],
+           'чёрный' :[0, 0, 0, 255]}
+
+# Преобразуем картинку в массив Numpy
+im = Image.open("ironman (1).png")
+iron = np.array(im)
+
+# Выведем картинку на экран
+plt.figure(figsize=(10,18))
+plt.imshow(im)
+plt.show()
+
+# Функция для изменения цвета, в соответствии с распознанными командами
+def avto(arr):
+  for ind,k in enumerate(arr):
+    if k in slovar2.keys():
+      if arr[ind+1] in colors2.keys():
+        iron[iron[:,:,0] == slovar2[k]] = colors2[arr[ind+1]]
+  return iron
 
 def record_and_recognize_audio(*args: tuple):
     """
@@ -90,3 +136,11 @@ if __name__ == "__main__":
         voice_input = record_and_recognize_audio()
         os.remove("microphone-results.wav")
         print(voice_input)
+        voice_input_split = voice_input.split(' ')
+        # Раскрашиваем
+        iron = avto(voice_input_split)
+        # Выведем картинку на экран
+        im2 = Image.fromarray(iron)
+        plt.figure(figsize=(10, 18))
+        plt.imshow(im2)
+        plt.show()
