@@ -38,7 +38,7 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
 
 
 def changeColorElement():
-    img_np = img_np1.copy()
+    # img_np = img_np1.copy()
 
     changeElement = AudioR.record_and_recognize_audio(flag=2)
     print(changeElement)
@@ -53,7 +53,7 @@ def changeColorElement():
             # и на изображении есть элементы с таким  цветом то переопределяем его цвет на новый
             for i in range(height):
                 for j in range(width):
-                    if (img_np[i, j, :] == slovarElements[changeElement]).all():
+                    if (img_np1[i, j, :] == slovarElements[changeElement]).all():
                         # print('change')
                         img_np[i, j, :] = colors[changeColor]
     im2 = Image.fromarray(img_np)
@@ -135,7 +135,8 @@ if __name__ == '__main__':
         im2 = Image.fromarray(img_np1)
         plt.imshow(im2)
         plt.show()
+        img_np = img_np1.copy()
         while True:
-            img_np = changeColorElement()
+            changeColorElement()
             if cv2.waitKey(0) & 0xFF == 27:
                 break
